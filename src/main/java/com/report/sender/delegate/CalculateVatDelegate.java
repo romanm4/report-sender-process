@@ -14,6 +14,6 @@ public class CalculateVatDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        calculateVatWebServiceClient.send();
+        calculateVatWebServiceClient.calculateVat("222", "22");
     }
 }

@@ -1,5 +1,6 @@
 package com.report.sender.client.ws;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.io.StringReader;
 import java.net.MalformedURLException;
@@ -16,21 +17,36 @@ import org.apache.cxf.staxutils.StaxUtils;
 
 @Component
 public class CalculateVatWebServiceClient {
-    public void send() throws MalformedURLException {
+
+    @Value("${spring.app.test}")
+    private String test;
+
+    public void calculateVat(String productCost, String percentVat) throws MalformedURLException {
+
         String address = "http://localhost:8091/gastronomy-calculate-booster/ws/calculateVat";
-        String request = "<ws:calculateVat>\n" +
-                "         <productCost>22</productCost>\n" +
-                "         <percentVAT>6</percentVAT>\n" +
-                "      </ws:calculateVat>\n";
+
+        String request = createSoapRequest(productCost, percentVat);
 
         StreamSource source = new StreamSource(new StringReader(request));
-        Service service = Service.create(new URL(address + "?wsdl"),
-                new QName("http://ws.api.booster.calculate.gastronomy.com/" , "HelloService"));
-        Dispatch<Source> disp = service.createDispatch(new QName("http://ws.api.booster.calculate.gastronomy.com/" , "HelloPort"),
-                Source.class, Mode.PAYLOAD);
+        Service service = Service.create(
+                new URL(address + "?wsdl"),
+                new QName("http://ws.api.booster.calculate.gastronomy.com/" , "CalculateVatWebService")
+        );
+
+        Dispatch<Source> disp = service.createDispatch(
+                new QName("http://ws.api.booster.calculate.gastronomy.com/" , "CalculateVatWebServicePort"),
+                Source.class, Mode.PAYLOAD
+        );
 
         Source result = disp.invoke(source);
         String resultAsString = StaxUtils.toString(result);
-        System.out.println(resultAsString);
     }
+
+    private String createSoapRequest(String productCost, String percentVat) {
+        return "<ns1:calculateVat xmlns:ns1='http://ws.api.booster.calculate.gastronomy.com/'>\n" +
+                "  <productCost>" + productCost + "</productCost>\n" +
+                "  <percentVAT>" + percentVat + "</percentVAT>\n" +
+                "</ns1:calculateVat>";
+    }
+
 }

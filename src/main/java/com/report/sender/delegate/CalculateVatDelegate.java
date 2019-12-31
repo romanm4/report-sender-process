@@ -14,6 +14,12 @@ public class CalculateVatDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        calculateVatWebServiceClient.calculateVat("222", "22");
+        execution.setVariable(
+                "calculateVatResponse",
+                calculateVatWebServiceClient.calculateVat(
+                        execution.getVariable("productCost").toString(),
+                        execution.getVariable("percentVAT").toString()
+                )
+        );
     }
 }

@@ -5,6 +5,7 @@ import com.report.sender.delegate.common.CalculateFoodCostRequest;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,10 +14,13 @@ public class CalculateFoodCostDelegate implements JavaDelegate {
     @Autowired
     private IRestExecutor restExecutor;
 
+    @Value("${spring.app.url.rest.calculateFoodCost}")
+    private String url;
+
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         execution.setVariable("calculateFoodCostResponse", restExecutor.executePostRequest(
-                "http://localhost:8091/gastronomy-calculate-booster/foodcost/calculate",
+                url,
                 new CalculateFoodCostRequest(
                         execution.getVariable("foodCostCount").toString(),
                         execution.getVariable("foodCostRevenue").toString()

@@ -18,32 +18,32 @@ import org.apache.cxf.staxutils.StaxUtils;
 @Component
 public class CalculateVatWebServiceClient {
 
-    @Value("${spring.app.test}")
-    private String test;
+    @Value("${spring.app.url.soap.calculateVat}")
+    private String url;
 
-    public void calculateVat(String productCost, String percentVat) throws MalformedURLException {
+    @Value("${spring.app.url.soap.namespaceURI}")
+    private String namespaceURI;
 
-        String address = "http://localhost:8091/gastronomy-calculate-booster/ws/calculateVat";
+    public String calculateVat(String productCost, String percentVat) throws MalformedURLException {
 
         String request = createSoapRequest(productCost, percentVat);
 
         StreamSource source = new StreamSource(new StringReader(request));
         Service service = Service.create(
-                new URL(address + "?wsdl"),
-                new QName("http://ws.api.booster.calculate.gastronomy.com/" , "CalculateVatWebService")
+                new URL(url),
+                new QName(namespaceURI , "CalculateVatWebService")
         );
 
-        Dispatch<Source> disp = service.createDispatch(
-                new QName("http://ws.api.booster.calculate.gastronomy.com/" , "CalculateVatWebServicePort"),
+        Dispatch<Source> dispatch = service.createDispatch(
+                new QName(namespaceURI , "CalculateVatWebServicePort"),
                 Source.class, Mode.PAYLOAD
         );
 
-        Source result = disp.invoke(source);
-        String resultAsString = StaxUtils.toString(result);
+        return StaxUtils.toString(dispatch.invoke(source));
     }
 
     private String createSoapRequest(String productCost, String percentVat) {
-        return "<ns1:calculateVat xmlns:ns1='http://ws.api.booster.calculate.gastronomy.com/'>\n" +
+        return "<ns1:calculateVat xmlns:ns1='" + namespaceURI + "'>\n" +
                 "  <productCost>" + productCost + "</productCost>\n" +
                 "  <percentVAT>" + percentVat + "</percentVAT>\n" +
                 "</ns1:calculateVat>";

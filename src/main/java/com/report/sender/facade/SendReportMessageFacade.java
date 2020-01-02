@@ -21,7 +21,7 @@ public class SendReportMessageFacade {
     private ObjectMapper objectMapper;
 
     public void sendReportMessage(Map<String, Object> variables) {
-        String message = convertObjectToJsonString(variables);
+        String message = convertObjectToJsonString(prepareReportMessage(variables));
     }
 
     private ReportMessage prepareReportMessage(Map<String, Object> variables) {

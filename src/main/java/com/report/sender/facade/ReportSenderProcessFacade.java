@@ -1,6 +1,9 @@
 package com.report.sender.facade;
 
 import com.report.sender.endpoint.rest.model.ReportSenderProcessRequest;
+import com.report.sender.util.ILogger;
+import com.report.sender.util.LogType;
+import com.report.sender.util.ServiceName;
 import org.activiti.engine.RuntimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,7 +17,11 @@ public class ReportSenderProcessFacade {
     @Autowired
     private RuntimeService runtimeService;
 
+    @Autowired
+    private ILogger logger;
+
     public void startProcess(Long accountId, ReportSenderProcessRequest request) {
+        logger.log(ServiceName.START_SEND_REPORT_PROCESS, LogType.INFO);
         Map<String, Object> variables = prepareContextVariables(accountId, request);
         runtimeService.startProcessInstanceByKey("java-delegate-report-sender-process", variables);
     }

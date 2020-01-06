@@ -3,6 +3,9 @@ package com.report.sender.facade;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.report.sender.delegate.common.*;
+import com.report.sender.util.ILogger;
+import com.report.sender.util.LogType;
+import com.report.sender.util.ServiceName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
@@ -28,10 +31,15 @@ public class SendReportMessageFacade {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private ILogger logger;
+
     public void sendReportMessage(Map<String, Object> variables) {
+        logger.log(ServiceName.SEND_REPORT_MESSAGE_DELEGATE, LogType.INFO);
         String message = convertObjectToJsonString(
                 prepareReportMessage(variables)
         );
+        logger.log(ServiceName.SEND_REPORT_MESSAGE_DELEGATE, LogType.REQUEST, message);
         jmsTemplate.convertAndSend(queue, message);
     }
 

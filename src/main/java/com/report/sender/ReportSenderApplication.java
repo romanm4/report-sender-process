@@ -1,8 +1,6 @@
 package com.report.sender;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.report.sender.util.ILogger;
-import com.report.sender.util.Logger;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;

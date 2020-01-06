@@ -1,5 +1,9 @@
 package com.report.sender.client.ws;
 
+import com.report.sender.util.ILogger;
+import com.report.sender.util.LogType;
+import com.report.sender.util.ServiceName;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.io.StringReader;
@@ -24,9 +28,13 @@ public class CalculateVatWebServiceClient {
     @Value("${spring.app.url.soap.namespaceURI}")
     private String namespaceURI;
 
+    @Autowired
+    private ILogger logger;
+
     public String calculateVat(String productCost, String percentVat) throws MalformedURLException {
 
         String request = createSoapRequest(productCost, percentVat);
+        logger.log(ServiceName.CALCULATE_VAT_DELEGATE, LogType.REQUEST, request);
 
         StreamSource source = new StreamSource(new StringReader(request));
         Service service = Service.create(

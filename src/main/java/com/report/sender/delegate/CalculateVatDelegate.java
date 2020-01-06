@@ -17,8 +17,8 @@ public class CalculateVatDelegate implements JavaDelegate {
         execution.setVariable(
                 "calculateVatResponse",
                 calculateVatWebServiceClient.calculateVat(
-                        execution.getVariable("productCost").toString(),
-                        execution.getVariable("percentVAT").toString()
+                        (String) execution.getVariable("productCost"),
+                        (String) execution.getVariable("percentVAT")
                 )
         );
     }

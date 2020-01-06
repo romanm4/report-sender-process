@@ -11,6 +11,7 @@ This project is based on the Spring Boot project and uses these packages:
 * [PostgreSQL](https://www.postgresql.org/) - Most Advanced Open Source Relational Database
 
 # Running application step by step
+1. Deploy project [gastronomy-calculate-booster](https://github.com/romanm4/gastronomy-calculate-booster) to Apache Tomcat. Required URL ```http://localhost:8091/gastronomy-calculate-booster```. **See application** [config file](https://github.com/romanm4/report-sender-process/blob/master/src/main/resources/application.properties).
 2. Execute this command in project terminal
 ```
 mvn clean install

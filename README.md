@@ -1,5 +1,5 @@
 # report-sender-process
-This application is demonstrating how to implement complicate business process using Activiti BPMN
+This application is demonstrating how to implement complicate business process using Activiti BPMN and Spring Boot
 
 # Inside
 This project is based on the Spring Boot project and uses these packages:

@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.report.sender.delegate.common.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.jms.Queue;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -18,12 +20,19 @@ import java.util.Map;
 public class SendReportMessageFacade {
 
     @Autowired
+    private Queue queue;
+
+    @Autowired
+    private JmsTemplate jmsTemplate;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     public void sendReportMessage(Map<String, Object> variables) {
         String message = convertObjectToJsonString(
                 prepareReportMessage(variables)
         );
+        jmsTemplate.convertAndSend(queue, message);
     }
 
     private ReportMessage prepareReportMessage(Map<String, Object> variables) {
